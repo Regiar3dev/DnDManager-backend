@@ -120,4 +120,54 @@ export default class CampaignService {
 
         return campaign;
     }
+
+    static async getCampaignById(campaignId: string) {
+        return Campaign.findById(campaignId);
+    }
+
+    static async updateCampaign(campaignId: string, updateData: any) {
+        const campaign = await Campaign.findByIdAndUpdate(campaignId, updateData, { new: true });
+
+        if (!campaign) {
+            throw new Error('Campaign not found');
+        }
+        return campaign;
+    }
+
+    static async deleteCampaign(campaignId: string) {
+        const campaign = await Campaign.findByIdAndDelete(campaignId);
+
+        if (!campaign) {
+            throw new Error('Campaign not found');
+        }
+        return campaign;
+    }
+
+    static async getCampaignSessions(campaignId: string) {
+        const campaign = await Campaign.findById(campaignId).populate('sessions');
+
+        if (!campaign) {
+            throw new Error('Campaign not found');
+        }
+        return campaign.sessions;
+    }
+
+    static async getCampaignCharacters(campaignId: string) {
+        const campaign = await Campaign.findById(campaignId).populate('characters');
+
+        if (!campaign) {
+            throw new Error('Campaign not found');
+        }
+        return campaign.characters;
+    }
+
+    // static async getCampaignEnemies(campaignId: string) {
+    //     const campaign = await Campaign.findById(campaignId).populate('enemies');
+
+    //     if (!campaign) {
+    //         throw new Error('Campaign not found');
+    //     }
+    //     return campaign.enemies;
+    // }
+
 }

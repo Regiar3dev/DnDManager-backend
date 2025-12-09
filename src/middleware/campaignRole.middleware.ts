@@ -32,7 +32,7 @@ const userUid: string = req.body.user.uid;
        ? 'DM' : campaign.players.some(playerId => playerId.toString() === userId)
        ? 'Player' : null;
 
-        if (!userRole) {
+        if (!userRole || userRole === null) {
             return res.status(403).json({ error: 'Forbidden: Not a member of the campaign' });
         }
 
