@@ -1,0 +1,1 @@
+// Middleware para validar el rol de un usuario en la pagina

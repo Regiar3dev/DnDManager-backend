@@ -1,15 +1,15 @@
 import express from 'express';
+import AuthController from '../controllers/auth.controller';
+import authMiddleware from '../middleware/auth.middleware';
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
-  res.send('Auth route is working');
-});
+// Registro y login de usuarios
+router.post('/register', AuthController.register);
+router.get('/login', authMiddleware, AuthController.login);
 
-// Example route for authentication
-router.post('/login', (req, res) => {});
-router.post('/register', (req, res) => {});
+// TBD: rutas adicionales para autenticación (logout, refresh token, etc.)
 
-router.post('/logout', (req, res) => {});
+// TBD: rutas para admins (gestión de usuarios, roles, permisos, etc.)
 
 export default router;

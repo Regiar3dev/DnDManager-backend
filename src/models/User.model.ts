@@ -1,9 +1,12 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose';
 
 export interface IUser extends Document {
   firebaseId: string;
   email: string;
   displayName: string;
+  role: string[];
+  DMCampaigns: Types.ObjectId[];
+  playerCampaigns: Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -26,6 +29,22 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: true,
     },
+    role: {
+      type: [String],
+      default: ['user'],
+    },
+    DMCampaigns: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Campaign',
+      },
+    ],
+    playerCampaigns: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Campaign',
+      },
+    ],
   },
   {
     timestamps: true,

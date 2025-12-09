@@ -6,10 +6,12 @@ router.get('/', (req, res) => {
   res.send('Campaign route is working');
 });
 
-router.get('/:campaignId/characters', (req, res) => {});
+// Fetchear detalles de un personaje y personajes del usuario
+router.get('/:characterId', (req, res) => {});
+router.get('/my', (req, res) => {});
 
-router.post('/:campaignId/create', (req, res) => {});
-router.put('/:campaignId/update', (req, res) => {});
-router.delete('/:campaignId/delete', (req, res) => {});
+// Actualizar y eliminar personajes
+router.put('/:characterId', (req, res) => {});
+router.delete('/:characterId', (req, res) => {});
 
 export default router;

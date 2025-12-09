@@ -1,23 +1,25 @@
 import { Schema, model, Document, Types } from 'mongoose';
 
 export interface ICharacter extends Document {
-  campaign: Types.ObjectId; // Reference to Campaign
-  owner: Types.ObjectId; // Reference to User
+  campaign: Types.ObjectId;
+  owner: Types.ObjectId; // DM de la campaña
   name: string;
   class: string;
   race: string;
   level: number;
-  experience: number;
-  hitPoints: number;
-  armorClass: number;
-  attributes: {
+  xp: number;
+  stats: {
+    hp: number;
+    maxHp: number;
+    ac: number;
     strength: number;
     dexterity: number;
     constitution: number;
     intelligence: number;
     wisdom: number;
     charisma: number;
-  };
+  }
+  armorClass: number;
   skills: Record<string, number>;
   equipment: string[];
   background: string;
@@ -58,25 +60,23 @@ const characterSchema = new Schema<ICharacter>(
       min: 1,
       max: 20,
     },
-    experience: {
+    xp: {
       type: Number,
       default: 0,
     },
-    hitPoints: {
-      type: Number,
-      required: true,
-    },
-    armorClass: {
-      type: Number,
-      required: true,
-    },
-    attributes: {
+    stats: {
+      hp: { type: Number, required: true },
+      maxHp: { type: Number, required: true },
       strength: { type: Number, required: true },
       dexterity: { type: Number, required: true },
       constitution: { type: Number, required: true },
       intelligence: { type: Number, required: true },
       wisdom: { type: Number, required: true },
       charisma: { type: Number, required: true },
+    },
+    armorClass: {
+      type: Number,
+      required: true,
     },
     skills: {
       type: Map,

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { userInfo } from 'os';
 
 const EXTERNAL_API_BASE_URL = process.env.EXTERNAL_API_BASE_URL || 'https://api.example.com';
 

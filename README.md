@@ -26,4 +26,3 @@ TBD
 - Bassi, Tomas Franco ()
 - Regiardo, Manuel ()
 - Scarponi, Franco ()
-
