@@ -4,6 +4,7 @@ import authMiddleware from '../middleware/auth.middleware';
 import CampaignController from '../controllers/campaign.controller';
 import { Campaign } from '../models';
 import SessionController from '../controllers/session.controller';
+import userContextMiddleware from '../middleware/userContext.middleware';
 
 const router = express.Router();
 
@@ -12,6 +13,7 @@ router.get('/', (req, res) => {
 });
 
 router.use(authMiddleware); // Activar una vez que se implemento todo.
+router.use(userContextMiddleware); // Activar una vez que se implemento todo.
 
 // Crear y fetchear campañas
 router.post('/', CampaignController.createCampaign);

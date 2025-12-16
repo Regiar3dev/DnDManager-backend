@@ -4,6 +4,7 @@ import { Request } from 'express';
 declare global {
   namespace Express {
     interface Request {
+      auth?: any;
       user?: any;
     }
   }
@@ -35,7 +36,7 @@ export default async function authMiddleware (
     const decodedToken = await admin.auth().verifyIdToken(token);
     console.log('Decoded Token:', decodedToken);
     
-    req.user = { uid: decodedToken.uid };
+    req.auth = { uid: decodedToken.uid };
     // console.log('Request Body after attaching decoded token:', req.body);
     next();
   } catch (error) {

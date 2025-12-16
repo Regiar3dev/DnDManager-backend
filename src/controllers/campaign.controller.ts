@@ -6,15 +6,15 @@ export default class CampaignController {
 
     static async createCampaign(req: Request, res: Response) {
         const { name, description } = req.body;
-        const firebaseId = req.user.uid;
+        const userId = req.user._id;
 
-        if (!name || !firebaseId) {
+        if (!name || !userId) {
             return res.status(400).json({ error: 'Name and DM ID are required' });
         }
 
         try {
             // Get MongoDB user from Firebase UID
-            const user = await UserService.getUserByUid(firebaseId);
+            const user = req.user;
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
             }
@@ -32,11 +32,11 @@ export default class CampaignController {
     }
 
     static async getCampaigns(req: Request, res: Response) {
-        const firebaseId = req.user.uid;
+        const userId = req.user._id;
 
         try {
             // Get MongoDB user from Firebase UID
-            const user = await UserService.getUserByUid(firebaseId);
+            const user = req.user;
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
             }
@@ -49,10 +49,10 @@ export default class CampaignController {
     }
 
     static async syncCampaigns(req: Request, res: Response) {
-        const firebaseId = req.user.uid;
+        const userId = req.user._id;
         try {
             // Get MongoDB user from Firebase UID
-            const user = await UserService.getUserByUid(firebaseId);
+            const user = req.user;
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
             }
@@ -66,14 +66,14 @@ export default class CampaignController {
     }
 
     static async joinCampaign(req: Request, res: Response) {
-        const firebaseId = req.user.uid;
+        const userId = req.user._id;
         const { inviteCode } = req.body;
         if (!inviteCode) {
             return res.status(400).json({ error: 'Invite code is required' });
         }
         try {
             // Get MongoDB user from Firebase UID
-            const user = await UserService.getUserByUid(firebaseId);
+            const user = req.user;
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
             }
@@ -86,7 +86,7 @@ export default class CampaignController {
     }
 
     static async leaveCampaign(req: Request, res: Response) {
-        const firebaseId = req.user.uid;
+        const userId = req.user._id;
         const { campaignId } = req.params;
 
         if (!campaignId) {
@@ -94,7 +94,7 @@ export default class CampaignController {
         }
 
         try {
-            const user = await UserService.getUserByUid(firebaseId);
+            const user = req.user;
             if (!user) {
                 return res.status(404).json({ error: 'User not found' });
             }
@@ -108,10 +108,9 @@ export default class CampaignController {
 
     static async getCampaignDetails(req: Request, res: Response) {
         const { campaignId } = req.params;
-        const firebaseId = req.user.uid;
-
-        const user = await UserService.getUserByUid(firebaseId);
+        const user = req.user;
         const userId = user?._id.toString();
+
 
         if (!campaignId) {
             return res.status(400).json({ error: 'Campaign ID is required' });
@@ -178,9 +177,7 @@ export default class CampaignController {
 
     static async getCampaignSessions(req: Request, res: Response) {
         const { campaignId } = req.params;
-        const firebaseId = req.user.uid;
-        
-        const user = await UserService.getUserByUid(firebaseId);
+        const user = req.user;
         const userId = user?._id.toString();
 
         if (!campaignId) {

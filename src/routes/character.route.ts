@@ -1,5 +1,6 @@
 import express from 'express';
 import authMiddleware from '../middleware/auth.middleware';
+import userContextMiddleware from '../middleware/userContext.middleware';
 
 const router = express.Router();
 
@@ -8,6 +9,7 @@ router.get('/', (req, res) => {
 });
 
 router.use(authMiddleware);
+router.use(userContextMiddleware);
 
 // Fetchear detalles de un personaje y personajes del usuario
 router.get('/:characterId', (req, res) => {});

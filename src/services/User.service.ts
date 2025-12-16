@@ -1,4 +1,5 @@
 import { User } from "../models/index"
+import { IUserRole } from "../models/User.model";
 
 export default class UserService {
     static async createMongoUser(data: { firebaseId: string; email: string; displayName: string; }) {
@@ -8,7 +9,7 @@ export default class UserService {
             firebaseId: data.firebaseId,
             email: data.email,
             displayName: data.displayName,
-            role: ['user'],
+            role: [IUserRole.User],
         });
     }
 

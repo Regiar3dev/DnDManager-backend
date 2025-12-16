@@ -14,7 +14,7 @@ export default class AuthController {
     }
 
     static async login(req: Request, res: Response) {
-        const firebaseId = req.user.uid;
+        const firebaseId = req.auth.uid;
 
         const user = await AuthService.login(firebaseId);
         res.status(200).json(user);

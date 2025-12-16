@@ -2,6 +2,7 @@ import express from 'express';
 import { requireCampaignRole } from '../middleware/campaignRole.middleware';
 import SessionController from '../controllers/session.controller';
 import authMiddleware from '../middleware/auth.middleware';
+import userContextMiddleware from '../middleware/userContext.middleware';
 
 const router = express.Router();
 
@@ -10,6 +11,7 @@ router.get('/', (req, res) => {
 });
 
 router.use(authMiddleware);
+router.use(userContextMiddleware);
 
 //Fetchear, unirse y salir de sesiones
 router.get('/:sessionId', SessionController.getSessionById);

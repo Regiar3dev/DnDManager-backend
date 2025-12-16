@@ -1,10 +1,15 @@
 import { Schema, model, Document, Types } from 'mongoose';
 
+export enum IUserRole {
+  User = 'user',
+  Admin = 'admin'
+}
+
 export interface IUser extends Document {
   firebaseId: string;
   email: string;
   displayName: string;
-  role: string[];
+  role: IUserRole[];
   DMCampaigns: Types.ObjectId[];
   playerCampaigns: Types.ObjectId[];
   createdAt: Date;
@@ -31,7 +36,8 @@ const userSchema = new Schema<IUser>(
     },
     role: {
       type: [String],
-      default: ['user'],
+      enum: Object.values(IUserRole),
+      default: [IUserRole.User],
     },
     DMCampaigns: [
       {

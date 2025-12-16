@@ -136,6 +136,12 @@ export default class CampaignService {
     static async deleteCampaign(campaignId: string) {
         const campaign = await Campaign.findByIdAndDelete(campaignId);
 
+        await User.updateMany({
+            playerCampaigns: campaignId
+        }, {
+            $pull: { playerCampaigns: campaignId }
+        });
+
         if (!campaign) {
             throw new Error('Campaign not found');
         }

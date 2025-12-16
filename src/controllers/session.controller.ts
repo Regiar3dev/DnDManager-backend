@@ -9,9 +9,10 @@ export default class SessionController{
     static async createSession(req: Request, res: Response) {
         const { campaignId } = req.params;
         const data: createSessionData = {...req.body, campaign: campaignId};
+        // const user = req.user;
+        // const userId = user._id;
 
         try{
-            
             if (!campaignId || !data.title) {
                 return res.status(400).json({ error: 'Campaign ID and title are required' });
             }
@@ -60,9 +61,7 @@ export default class SessionController{
 
     static async getSessionById(req: Request, res: Response): Promise<void> {
         const { sessionId } = req.params;
-        const firebaseId = req.user.uid;
-
-        const user = await UserService.getUserByUid(firebaseId);
+        const user = req.user;
         const userId = user?._id.toString();
         
         if (!sessionId) {
@@ -109,9 +108,8 @@ export default class SessionController{
     
     static async joinSession(req: Request, res: Response) {
         const { sessionId } = req.params;
-        const firebaseId = req.user.uid;
+        const user = req.user;
 
-        const user = await UserService.getUserByUid(firebaseId);
         const userId = user?._id.toString();
 
         try {
@@ -125,8 +123,8 @@ export default class SessionController{
             if (!session) {
                 return res.status(404).json({ error: 'Session not found' });
             }
-
-            res.status(200).json(session);
+            const { notesDM, ...sessionData } = session.toObject();
+            res.status(200).json(sessionData);
 
         } catch (error) {
             console.error('Error joining session:', error);
@@ -136,9 +134,8 @@ export default class SessionController{
     
     static async leaveSession(req: Request, res: Response) {
         const { sessionId } = req.params;
-        const firebaseId = req.user.uid;
+        const user = req.user;
 
-        const user = await UserService.getUserByUid(firebaseId);
         const userId = user?._id.toString();
         try {
             
@@ -152,7 +149,9 @@ export default class SessionController{
                return res.status(404).json({ error: 'Session not found' });
             }
 
-            res.status(200).json(session);
+            const { notesDM, ...sessionData } = session.toObject();
+
+            res.status(200).json(sessionData);
 
         } catch (error) {
             console.error('Error leaving session:', error);
