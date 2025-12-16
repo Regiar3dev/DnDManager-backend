@@ -17,7 +17,7 @@ router.use(authMiddleware);
 router.use(userContextMiddleware);
 
 //Fetchear, unirse y salir de sesiones
-router.get('/:sessionId',validationMiddleware(SessionSchema), SessionController.getSessionById);
+router.get('/:sessionId', validationMiddleware(SessionSchema), SessionController.getSessionById);
 router.post('/:sessionId/join', requireCampaignRole('Player'), SessionController.joinSession);
 router.post('/:sessionId/leave', requireCampaignRole('Player'), SessionController.leaveSession);
 

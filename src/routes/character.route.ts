@@ -8,6 +8,10 @@ import CharacterController from '../controllers/character.controller';
 
 const router = express.Router();
 
+router.get('/', (req, res) => {
+  res.send('Character route is working');
+});
+
 router.use(authMiddleware);
 router.use(userContextMiddleware);
 
