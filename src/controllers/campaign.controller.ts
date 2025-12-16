@@ -220,13 +220,16 @@ export default class CampaignController {
         }
 
         try{
-            const characters = await CampaignService.getCampaignCharacters(campaignId);
+            const campaign = await CampaignService.getCampaignCharacters(campaignId);
+            if (!campaign) {
+                return res.status(404).json({ error: 'Campaign not found' });
+            }
             
-            if (!characters || characters.length === 0) {
+            if (!campaign.characters || campaign.characters.length === 0) {
                 return res.status(404).json({ error: 'No characters found for this campaign' });
             }
             
-            res.status(200).json(characters);
+            res.status(200).json(campaign.characters);
         } catch (error) {
             console.error('Error fetching campaign characters:', error);
             res.status(500).json({ error: 'Failed to fetch campaign characters' });

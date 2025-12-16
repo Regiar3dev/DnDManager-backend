@@ -165,7 +165,7 @@ export default class CampaignService {
         if (!campaign) {
             throw new Error('Campaign not found');
         }
-        return campaign.characters;
+        return campaign;
     }
 
     // static async getCampaignEnemies(campaignId: string) {

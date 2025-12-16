@@ -4,6 +4,8 @@ import { Request, Response, NextFunction } from 'express';
 import { Campaign } from '../models/Campaign.model';
 import { Session } from '../models/Session.model';
 import UserService from '../services/User.service';
+import { Types } from 'mongoose';
+import CampaignService from '../services/Campaign.service';
 
 export const requireCampaignRole = (role: string) => async (req: Request, res: Response, next: NextFunction) => {
     
@@ -13,15 +15,23 @@ export const requireCampaignRole = (role: string) => async (req: Request, res: R
     let { campaignId } = req.params;
     const { sessionId } = req.params;
 
+    if (!campaignId) {
+        campaignId = '';
+    }
+ 
     try {
-        if (!campaignId && sessionId) { // Obtener campaignId desde sessionId si no se proporciona (para endpoints de sesión)
+        if ((!campaignId || campaignId === '') && sessionId ) { // Obtener campaignId desde sessionId si no se proporciona (para endpoints de sesión)
             const session = await Session.findById(sessionId);
+            
             if (!session) {
                 return res.status(404).json({ error: 'Session not found' });
             }
+            
             campaignId = session.campaign.toString();
         }
-        const campaign = await Campaign.findById(campaignId);
+        
+        const campaign = await CampaignService.getCampaignById(campaignId);
+
         if (!campaign) {
             return res.status(404).json({ error: 'Campaign not found' });
         }
