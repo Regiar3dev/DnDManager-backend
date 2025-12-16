@@ -60,7 +60,7 @@ export default class SessionController{
 
     static async getSessionById(req: Request, res: Response): Promise<void> {
         const { sessionId } = req.params;
-        const firebaseId = req.body.user.uid;
+        const firebaseId = req.user.uid;
 
         const user = await UserService.getUserByUid(firebaseId);
         const userId = user?._id.toString();
@@ -109,7 +109,7 @@ export default class SessionController{
     
     static async joinSession(req: Request, res: Response) {
         const { sessionId } = req.params;
-        const firebaseId = req.body.user.uid;
+        const firebaseId = req.user.uid;
 
         const user = await UserService.getUserByUid(firebaseId);
         const userId = user?._id.toString();
@@ -136,7 +136,7 @@ export default class SessionController{
     
     static async leaveSession(req: Request, res: Response) {
         const { sessionId } = req.params;
-        const firebaseId = req.body.user.uid;
+        const firebaseId = req.user.uid;
 
         const user = await UserService.getUserByUid(firebaseId);
         const userId = user?._id.toString();

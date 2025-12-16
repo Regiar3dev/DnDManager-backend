@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
   res.send('Campaign route is working');
 });
 
-// router.use(authMiddleware); Activar una vez que se implemento todo.
+router.use(authMiddleware); // Activar una vez que se implemento todo.
 
 // Crear y fetchear campañas
 router.post('/', CampaignController.createCampaign);

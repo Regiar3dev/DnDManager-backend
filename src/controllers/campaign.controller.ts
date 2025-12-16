@@ -6,7 +6,7 @@ export default class CampaignController {
 
     static async createCampaign(req: Request, res: Response) {
         const { name, description } = req.body;
-        const firebaseId = req.body.user.uid;
+        const firebaseId = req.user.uid;
 
         if (!name || !firebaseId) {
             return res.status(400).json({ error: 'Name and DM ID are required' });
@@ -32,7 +32,7 @@ export default class CampaignController {
     }
 
     static async getCampaigns(req: Request, res: Response) {
-        const firebaseId = req.body.user.uid;
+        const firebaseId = req.user.uid;
 
         try {
             // Get MongoDB user from Firebase UID
@@ -49,7 +49,7 @@ export default class CampaignController {
     }
 
     static async syncCampaigns(req: Request, res: Response) {
-        const firebaseId = req.body.user.uid;
+        const firebaseId = req.user.uid;
         try {
             // Get MongoDB user from Firebase UID
             const user = await UserService.getUserByUid(firebaseId);
@@ -66,7 +66,7 @@ export default class CampaignController {
     }
 
     static async joinCampaign(req: Request, res: Response) {
-        const firebaseId = req.body.user.uid;
+        const firebaseId = req.user.uid;
         const { inviteCode } = req.body;
         if (!inviteCode) {
             return res.status(400).json({ error: 'Invite code is required' });
@@ -86,7 +86,7 @@ export default class CampaignController {
     }
 
     static async leaveCampaign(req: Request, res: Response) {
-        const firebaseId = req.body.user.uid;
+        const firebaseId = req.user.uid;
         const { campaignId } = req.params;
 
         if (!campaignId) {
@@ -108,7 +108,7 @@ export default class CampaignController {
 
     static async getCampaignDetails(req: Request, res: Response) {
         const { campaignId } = req.params;
-        const firebaseId = req.body.user.uid;
+        const firebaseId = req.user.uid;
 
         const user = await UserService.getUserByUid(firebaseId);
         const userId = user?._id.toString();
@@ -178,7 +178,7 @@ export default class CampaignController {
 
     static async getCampaignSessions(req: Request, res: Response) {
         const { campaignId } = req.params;
-        const firebaseId = req.body.user.uid;
+        const firebaseId = req.user.uid;
         
         const user = await UserService.getUserByUid(firebaseId);
         const userId = user?._id.toString();
