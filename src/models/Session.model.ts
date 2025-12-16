@@ -5,6 +5,7 @@ export interface ISession extends Document {
   sessionNumber: number; // Número de la sesión dentro de la campaña
   title: string;
   description: string;
+  status: 'planned' | 'ongoing' | 'paused' | 'completed';
   coverPhoto: string;
   startDate: Date;
   endDate: Date;
@@ -35,6 +36,11 @@ const sessionSchema = new Schema<ISession>(
     description: {
       type: String,
       default: '',
+    },
+    status: {
+      type: String,
+      enum: ['planned', 'ongoing', 'paused', 'completed'],
+      default: 'planned',
     },
     coverPhoto: {
       type: String,

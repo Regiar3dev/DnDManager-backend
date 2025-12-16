@@ -3,6 +3,7 @@ import { requireCampaignRole } from '../middleware/campaignRole.middleware';
 import authMiddleware from '../middleware/auth.middleware';
 import CampaignController from '../controllers/campaign.controller';
 import { Campaign } from '../models';
+import SessionController from '../controllers/session.controller';
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ router.get('/:campaignId', CampaignController.getCampaignDetails);
 // router.get('/sync', CampaignController.syncCampaigns); Test Endpoint
 
 // Crear y fetchear sesiones de una campaña (Se manejan las rutas desde la campaña, pero usan sus propios controllers y servicios)
-router.post('/:campaignId/sessions', requireCampaignRole('DM'), (req, res) => {});
+router.post('/:campaignId/sessions', requireCampaignRole('DM'), SessionController.createSession);
 router.get('/:campaignId/sessions', CampaignController.getCampaignSessions);
 
 // Crear y fetchear personajes de una campaña (Se manejan las rutas desde la campaña, pero usan sus propios controllers y servicios)
@@ -28,7 +29,7 @@ router.post('/:campaignId/characters', requireCampaignRole('Player'), (req, res)
 router.get('/:campaignId/characters', CampaignController.getCampaignCharacters);
 
 // Crear y fetchear enemigos de una campaña (Se manejan las rutas desde la campaña, pero usan sus propios controllers y servicios)
-router.post('/:campaignId/enemies', requireCampaignRole('DM'), (req, res) => {});
+// router.post('/:campaignId/enemies', requireCampaignRole('DM'), (req, res) => {});
 // router.get('/:campaignId/enemies', requireCampaignRole('DM'), CampaignController.getCampaignEnemies);
 
 // Unirse y salir de campañas

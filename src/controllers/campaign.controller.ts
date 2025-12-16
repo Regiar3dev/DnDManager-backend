@@ -178,6 +178,10 @@ export default class CampaignController {
 
     static async getCampaignSessions(req: Request, res: Response) {
         const { campaignId } = req.params;
+        const firebaseId = req.body.user.uid;
+        
+        const user = await UserService.getUserByUid(firebaseId);
+        const userId = user?._id.toString();
 
         if (!campaignId) {
             return res.status(400).json({ error: 'Campaign ID is required' });
@@ -185,12 +189,29 @@ export default class CampaignController {
 
         try{
             const sessions = await CampaignService.getCampaignSessions(campaignId);
+            const campaign = await CampaignService.getCampaignById(campaignId);
             
-            if (!sessions || sessions.length === 0) {
+            if (!sessions) {
                 return res.status(404).json({ error: 'No sessions found for this campaign' });
             }
-            
-            res.status(200).json(sessions);
+            const isDM = campaign?.DM.toString() === userId;
+
+            if (isDM) {
+                res.status(200).json(sessions);
+                return;
+            }
+
+            if (campaign?.players.some(playerId => playerId.toString() === userId)) {
+                
+                const filteredSessions = await sessions.map(session => {
+                    const { notesDM, ...sessionData } = session.toObject();
+                    return sessionData;
+                });
+                res.status(200).json(filteredSessions);
+                return;
+            } 
+
+            return res.status(403).json({ error: 'Forbidden: Not a member of the campaign' });
         } catch (error) {
             console.error('Error fetching campaign sessions:', error);
             res.status(500).json({ error: 'Failed to fetch campaign sessions' });

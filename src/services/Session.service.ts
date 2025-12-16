@@ -1,13 +1,47 @@
+import { Campaign } from '../models';
 import { Session } from '../models/Session.model';
 
+export interface createSessionData {
+    campaign: string;
+    sessionNumber?: number;
+    title: string;
+    description?: string;
+    startDate?: Date;
+    coverPhoto?: string;
+    notesDM?: string;
+    notesPlayers?: string;
+    participants?: string[];
+    events?: string[];
+    endDate?: Date;
+}
+
 export default class SessionService {
-    static async createSession(data: { campaignId: string; title: string; description?: string; startDate?: Date; }) {
-        return Session.create({
-            campaign: data.campaignId,
-            title: data.title,
-            description: data.description || '',
-            startDate: data.startDate || new Date(),
+    static async createSession(data: createSessionData) {
+
+        const ExistingCampaign = await Campaign.findById(data.campaign);
+        if (!ExistingCampaign) {
+            throw new Error('Campaign not found');
+        }
+        
+        const lastSession = await Session.findOne({ campaign: data.campaign })
+            .sort({ sessionNumber: -1 })
+            .select('sessionNumber');
+
+        const nextSessionNumber = lastSession ? lastSession.sessionNumber + 1 : 1;
+
+        const session = new Session({
+            ...data,
+            campaign: ExistingCampaign._id,
+            sessionNumber: nextSessionNumber,
         });
+
+        await session.save();
+
+        await Campaign.findByIdAndUpdate(data.campaign, {
+            $push: { sessions: session._id }
+        });
+
+        return session;
     }
 
     static async getSessionsByCampaign(campaignId: string) {
@@ -31,13 +65,14 @@ export default class SessionService {
     }
 
     static async getSessionById(sessionId: string) {
-        return Session.findById(sessionId);
+        const session = await Session.findById(sessionId);
+        return session;
     }
 
-    static async startSession(sessionId: string, startDate: Date) {
+    static async startSession(sessionId: string) {
         return Session.findByIdAndUpdate(
             sessionId,
-            { startDate: startDate },
+            { status: 'ongoing', startDate: new Date(Date.now()) },
             { new: true }
         );
     }
@@ -45,15 +80,15 @@ export default class SessionService {
     static async pauseSession(sessionId: string) { // Falta booleano indicando estado de la sesion
         return Session.findByIdAndUpdate(
             sessionId,
-            { endDate: new Date() },
+            { status: 'paused', endDate: new Date(Date.now()) },
             { new: true }
         );
     }
 
-    static async endSession(sessionId: string, endDate: Date) {
+    static async endSession(sessionId: string) {
         return Session.findByIdAndUpdate(
             sessionId,
-            { endDate: endDate },
+            { status: 'completed', endDate: new Date(Date.now()) },
             { new: true }
         );
     }

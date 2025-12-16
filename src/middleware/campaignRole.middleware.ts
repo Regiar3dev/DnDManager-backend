@@ -7,7 +7,7 @@ import UserService from '../services/User.service';
 
 export const requireCampaignRole = (role: string) => async (req: Request, res: Response, next: NextFunction) => {
     
-const userUid: string = req.body.user.uid;
+    const userUid: string = req.body.user.uid;
 
     const user = await UserService.getUserByUid(userUid);
     const userId = user?._id.toString();

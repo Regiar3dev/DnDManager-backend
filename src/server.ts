@@ -14,7 +14,6 @@ import sessionRouter from './routes/session.route';
 import characterRouter from './routes/character.route';
 
 const app = express();
-dotenv.config();
 
 app.use(express.json());
 app.use(cors());

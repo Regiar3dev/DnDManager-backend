@@ -1,7 +1,6 @@
-import { start } from 'repl';
+import { Session } from '../models';
 import { Campaign } from '../models/Campaign.model';
 import { User } from '../models/User.model';
-import { Session } from '../models';
 
 export default class CampaignService {
 
@@ -144,12 +143,14 @@ export default class CampaignService {
     }
 
     static async getCampaignSessions(campaignId: string) {
-        const campaign = await Campaign.findById(campaignId).populate('sessions');
+        const campaign = await Campaign.findById(campaignId);
 
         if (!campaign) {
             throw new Error('Campaign not found');
         }
-        return campaign.sessions;
+
+        const sessions = await Session.find({ campaign: campaignId });
+        return sessions;
     }
 
     static async getCampaignCharacters(campaignId: string) {
@@ -163,7 +164,6 @@ export default class CampaignService {
 
     // static async getCampaignEnemies(campaignId: string) {
     //     const campaign = await Campaign.findById(campaignId).populate('enemies');
-
     //     if (!campaign) {
     //         throw new Error('Campaign not found');
     //     }
