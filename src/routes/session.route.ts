@@ -2,6 +2,9 @@ import express from 'express';
 import { requireCampaignRole } from '../middleware/campaignRole.middleware';
 import SessionController from '../controllers/session.controller';
 import authMiddleware from '../middleware/auth.middleware';
+import validationMiddleware from '../middleware/validation.middleware';
+import { SessionSchema } from '../schemas/Session.schema';
+import { SessionNoteSchema } from '../schemas/Session.schema';
 import userContextMiddleware from '../middleware/userContext.middleware';
 
 const router = express.Router();
@@ -14,7 +17,7 @@ router.use(authMiddleware);
 router.use(userContextMiddleware);
 
 //Fetchear, unirse y salir de sesiones
-router.get('/:sessionId', SessionController.getSessionById);
+router.get('/:sessionId',validationMiddleware(SessionSchema), SessionController.getSessionById);
 router.post('/:sessionId/join', requireCampaignRole('Player'), SessionController.joinSession);
 router.post('/:sessionId/leave', requireCampaignRole('Player'), SessionController.leaveSession);
 
@@ -24,7 +27,7 @@ router.post('/:sessionId/pause', requireCampaignRole('DM'), SessionController.pa
 router.post('/:sessionId/end', requireCampaignRole('DM'), SessionController.endSession);
 
 // Actualizar notas y eventos de la sesión
-router.put('/:sessionId/note', requireCampaignRole('DM'), SessionController.addNoteToSession);
+router.put('/:sessionId/note', requireCampaignRole('DM'),validationMiddleware(SessionNoteSchema), SessionController.addNoteToSession);
 // router.post('/:sessionId/event', requireCampaignRole('DM'), (req, res) => {});
 
 export default router;

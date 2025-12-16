@@ -4,8 +4,10 @@ import authMiddleware from '../middleware/auth.middleware';
 import CampaignController from '../controllers/campaign.controller';
 import { Campaign } from '../models';
 import SessionController from '../controllers/session.controller';
-import userContextMiddleware from '../middleware/userContext.middleware';
 import CharacterController from '../controllers/character.controller';
+import validationMiddleware from '../middleware/validation.middleware';
+import { CampaignCreateSchema } from '../schemas/Campaign.schema';
+import { CampaignUpdateSchema } from '../schemas/Campaign.schema';
 
 const router = express.Router();
 
@@ -13,11 +15,9 @@ router.get('/', (req, res) => {
   res.send('Campaign route is working');
 });
 
-router.use(authMiddleware); // Activar una vez que se implemento todo.
-router.use(userContextMiddleware); // Activar una vez que se implemento todo.
-
+router.use(authMiddleware);
 // Crear y fetchear campañas
-router.post('/', CampaignController.createCampaign);
+router.post('/',validationMiddleware(CampaignCreateSchema), CampaignController.createCampaign);
 router.get('/my', CampaignController.getCampaigns);
 router.get('/:campaignId', CampaignController.getCampaignDetails);
 
@@ -36,11 +36,11 @@ router.get('/:campaignId/characters', CampaignController.getCampaignCharacters);
 // router.get('/:campaignId/enemies', requireCampaignRole('DM'), CampaignController.getCampaignEnemies);
 
 // Unirse y salir de campañas
-router.post('/join',  CampaignController.joinCampaign);
+router.post('/join', CampaignController.joinCampaign);
 router.post('/:campaignId/leave', requireCampaignRole('Player'), CampaignController.leaveCampaign);
 
 // Actualizar y eliminar campañas
-router.patch('/:campaignId', requireCampaignRole('DM'), CampaignController.updateCampaign);
+router.patch('/:campaignId', requireCampaignRole('DM'), validationMiddleware(CampaignUpdateSchema), CampaignController.updateCampaign);
 router.delete('/:campaignId', requireCampaignRole('DM'), CampaignController.deleteCampaign);
 
 export default router;
