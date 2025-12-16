@@ -8,6 +8,7 @@ import validationMiddleware from '../middleware/validation.middleware';
 import { CampaignCreateSchema, CampaignUpdateSchema } from '../schemas/Campaign.schema';
 import { CharacterCreateSchema } from '../schemas/Character.schema';
 import { SessionSchema } from '../schemas/Session.schema';
+import userContextMiddleware from '../middleware/userContext.middleware';
 
 const router = express.Router();
 
@@ -16,6 +17,8 @@ router.get('/', (req, res) => {
 });
 
 router.use(authMiddleware);
+router.use(userContextMiddleware);
+
 // Crear y fetchear campañas
 router.post('/',validationMiddleware(CampaignCreateSchema), CampaignController.createCampaign);
 router.get('/my', CampaignController.getCampaigns);

@@ -32,15 +32,11 @@ export default class CampaignController {
     }
 
     static async getCampaigns(req: Request, res: Response) {
-        const userId = req.user._id;
-
+        const user = req.user;
+        console.log('Fetching campaigns for user ID:', user);
+        const userId = user._id.toString();
         try {
-            // Get MongoDB user from Firebase UID
-            const user = req.user;
-            if (!user) {
-                return res.status(404).json({ error: 'User not found' });
-            }
-            const campaigns = await CampaignService.getCampaignsByUserId(user._id.toString());
+            const campaigns = await CampaignService.getCampaignsByUserId(userId);
             res.status(200).json(campaigns);
         } catch (error) {
             console.error('Error fetching campaigns:', error);

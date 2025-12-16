@@ -1,11 +1,6 @@
 import joi from 'joi';
 
 export const SessionSchema = joi.object({
-    campaign: joi.string().hex().length(24).required().messages({
-        'string.hex': 'Campaign ID must be a valid hex string',
-        'string.length': 'Campaign ID must be 24 characters long',
-        'any.required': 'Campaign ID is required',
-    }),
     title: joi.string().required().messages({
         'string.base': 'Title must be a string',
         'any.required': 'Title is required',
@@ -22,7 +17,7 @@ export const SessionSchema = joi.object({
     notesPlayers: joi.string().allow('').optional().messages({
         'string.base': 'Player notes must be a string',
     }),
-    forDM: joi.boolean().required().messages({
+    forDM: joi.boolean().optional().messages({
         'boolean.base': 'forDM must be a boolean',
         'any.required': 'forDM is required',
     }),

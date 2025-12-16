@@ -15,7 +15,6 @@ router.get('/', (req, res) => {
 router.use(authMiddleware);
 router.use(userContextMiddleware);
 
-
 // Fetchear detalles de un personaje y personajes del usuario
 router.get('/:characterId', validationMiddleware(CharacterCreateSchema), CharacterController.getCharacterDetails);
 router.get('/', CharacterController.getCharactersByPlayer);

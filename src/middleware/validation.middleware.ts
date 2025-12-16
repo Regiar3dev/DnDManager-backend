@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-// Middleware para validar inputs y datos en las solicitudes
-=======
-// Middleware para validar inputs y datos en las solicitudes
+// Middlewarnpm e para validar inputs y datos en las solicitudes
 import { Request, Response, NextFunction } from 'express';
 import { Schema } from 'joi';
 
@@ -18,4 +15,3 @@ const validationMiddleware = (schema: Schema) => {
 };
 
 export default validationMiddleware;
->>>>>>> 35de856 (Validacion)
