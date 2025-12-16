@@ -131,8 +131,6 @@ export default class CampaignController {
             ? 'DM' : campaign.players.some(playerId => playerId.toString() === userId)
             ? 'Player' : null;
 
-            console.log('User Role in Campaign:', userRole);
-
             if (userRole === 'Player') {
                 const { name, description, DM, players, characters, sessions } = campaign;
                 return res.status(200).json({ name, description, DM, players, characters, sessions });

@@ -5,6 +5,7 @@ import CampaignController from '../controllers/campaign.controller';
 import { Campaign } from '../models';
 import SessionController from '../controllers/session.controller';
 import userContextMiddleware from '../middleware/userContext.middleware';
+import CharacterController from '../controllers/character.controller';
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.post('/:campaignId/sessions', requireCampaignRole('DM'), SessionControlle
 router.get('/:campaignId/sessions', CampaignController.getCampaignSessions);
 
 // Crear y fetchear personajes de una campaña (Se manejan las rutas desde la campaña, pero usan sus propios controllers y servicios)
-router.post('/:campaignId/characters', requireCampaignRole('Player'), (req, res) => {});
+router.post('/:campaignId/characters', requireCampaignRole('Player'), CharacterController.createCharacter);
 router.get('/:campaignId/characters', CampaignController.getCampaignCharacters);
 
 // Crear y fetchear enemigos de una campaña (Se manejan las rutas desde la campaña, pero usan sus propios controllers y servicios)

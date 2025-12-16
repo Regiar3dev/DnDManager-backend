@@ -19,14 +19,11 @@ export default async function authMiddleware (
 ) {
 
   const authHeader = req.headers.authorization;
-  console.log('Auth Header:', authHeader);
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) return res.status(401).json({ error: 'No token provided' });
 
 
   const token = authHeader.split('Bearer ')[1];
-  console.log('Token length:', token?.length);
-  console.log('Token preview:', token?.substring(0, 50) + '...');
 
   if (!token) {
     return res.status(401).json({ error: 'Token extraction failed' });
@@ -34,10 +31,8 @@ export default async function authMiddleware (
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(token);
-    console.log('Decoded Token:', decodedToken);
     
     req.auth = { uid: decodedToken.uid };
-    // console.log('Request Body after attaching decoded token:', req.body);
     next();
   } catch (error) {
     console.error('Error verifying token:', error);

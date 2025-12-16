@@ -4,7 +4,7 @@
   "description": "Backend API for DnDManager WebApp",
   "license": "ISC",
   "author": "",
-  "main": "app.ts",
+  "main": "server.ts",
   "scripts": {
     "start": "ts-node src/server.ts",
     "dev": "ts-node-dev src/server.ts",
